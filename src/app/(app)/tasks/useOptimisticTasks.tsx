@@ -27,6 +27,7 @@ export const useOptimisticTasks = (
 
       switch (action.action) {
         case "create":
+          // @ts-ignore
           return currentState.length === 0
             ? [optimisticTask]
             : [...currentState, optimisticTask];
