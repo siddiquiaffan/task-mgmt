@@ -1,6 +1,6 @@
 // Importing necessary libraries and components
 import React, { useEffect } from 'react'
-import { CalendarIcon } from "lucide-react";
+import { CalendarIcon, CrossIcon, SidebarCloseIcon, X } from "lucide-react";
 import { useRouter } from "next/navigation";
 import {
     Select,
@@ -42,6 +42,11 @@ const DateFilter: React.FC<DateFilterProps> = ({ page, initialDate, searchParam 
         } catch (error) {
             console.error("Error changing date", error)
         }
+    }
+
+    const handleClear = () => {
+        setFilterDate(null)
+        router.push(page)
     }
 
     // Effect to handle date change when filterDate changes
@@ -110,6 +115,13 @@ const DateFilter: React.FC<DateFilterProps> = ({ page, initialDate, searchParam 
                             return false
                         }} selected={filterDate || new Date()} onSelect={setFilterDate as any} />
                     </div>
+                    {
+                        filterDate && (
+                            <Button onClick={handleClear} variant={'outline'} className="w-full text-red-400">
+                                Clear Selection <X className='ml-2' />
+                            </Button>
+                        )
+                    }
                 </PopoverContent>
             </Popover>
         </form>)
