@@ -160,35 +160,39 @@ const Task = ({
   return (
     <li
       className={cn(
-        "flex justify-between my-2 col-span-1 px-5 py-2 rounded bg-zinc-50 shadow",
-        mutating ? "opacity-30 animate-pulse" : "",
-        deleting ? "text-destructive" : "",
+        "my-2 col-span-1 px-5 py-3 rounded bg-zinc-50 dark:bg-zinc-900/70 shadow grow",
       )}
     >
-      <div className="grow">
-        <div className="flex space-x-2">
-          <p className={cn(
-            "text-muted-foreground mb-2 rounded-full px-3 py-0.5 max-w-max",
-            task.status === "TODO" ? "bg-zinc-300/40" : "",
-            task.status === "IN_PROGRESS" ? "bg-yellow-300/40" : "",
-            task.status === "DONE" ? "bg-green-300/40" : "",
-          )}>{task_map[task.status]}</p>
+      <Link href={basePath + "/" + task.id} className={cn(
+        "flex justify-between",
+        mutating ? "opacity-30 animate-pulse" : "",
+        deleting ? "text-destructive" : "",
+      )}>
+        <div className="grow">
+          <div className="flex space-x-2">
+            <p className={cn(
+              "text-muted-foreground mb-2 rounded-full px-3 py-0.5 max-w-max dark:text-zinc-200",
+              task.status === "TODO" ? "bg-zinc-300/40" : "",
+              task.status === "IN_PROGRESS" ? "bg-yellow-300/40" : "",
+              task.status === "DONE" ? "bg-green-300/40" : "",
+            )}>{task_map[task.status]}</p>
+          </div>
+          <h3 className="text-xl font-semibold mb-1">{task.title}</h3>
+          {
+            task.dueDate && (
+              <p className="mb-3">Due: {format(task.dueDate, "d MMMM yyyy")}</p>
+            )
+          }
+          <p className="text-xs line-clamp-2">
+            {task.description}
+          </p>
         </div>
-        <h3 className="text-xl font-semibold mb-1">{task.title}</h3>
-        {
-          task.dueDate && (
-            <p className="mb-3">Due: {format(task.dueDate, "d MMMM yyyy")}</p>
-          )
-        }
-        <p className="text-xs line-clamp-2">
-          {task.description}
-        </p>
-      </div>
-      <Button variant={"link"} asChild>
-        <Link href={basePath + "/" + task.id}>
-          Edit
-        </Link>
-      </Button>
+        <Button variant={"link"} asChild>
+          <Link href={basePath + "/" + task.id + '#edit'}>
+            Edit
+          </Link>
+        </Button>
+      </Link>
     </li>
   );
 };
