@@ -8,7 +8,11 @@ import { getTasks } from "@/lib/api/tasks/queries";
 const baseSchema = taskSchema.omit(timestamps)
 
 export const insertTaskSchema = baseSchema.omit({ id: true });
-export const insertTaskParams = baseSchema.extend({}).omit({ 
+export const insertTaskParams = baseSchema.extend({
+  dueDate: z.coerce.date({
+    coerce: true
+  }).optional(),
+}).omit({ 
   id: true,
   userId: true
 });
