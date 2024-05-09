@@ -46,7 +46,7 @@ const DateFilter: React.FC<DateFilterProps> = ({ page, initialDate, searchParam 
 
     const handleClear = () => {
         setFilterDate(null)
-        router.push(page)
+        router.replace(page)
     }
 
     // Effect to handle date change when filterDate changes
