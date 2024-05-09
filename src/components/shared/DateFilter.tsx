@@ -113,7 +113,7 @@ const DateFilter: React.FC<DateFilterProps> = ({ page, initialDate, searchParam 
                     <div className="rounded-md border">
                         <Calendar mode="single" disabled={() => {
                             return false
-                        }} selected={filterDate || new Date()} onSelect={setFilterDate as any} />
+                        }} selected={filterDate || undefined} onSelect={setFilterDate as any} />
                     </div>
                     {
                         filterDate && (
