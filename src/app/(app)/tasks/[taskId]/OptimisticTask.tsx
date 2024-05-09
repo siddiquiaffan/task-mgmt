@@ -1,7 +1,7 @@
 "use client";
 
 // Importing necessary libraries and components
-import { useOptimistic, useState } from "react";
+import { useEffect, useOptimistic, useState } from "react";
 import { TAddOptimistic } from "@/app/(app)/tasks/useOptimisticTasks";
 import { type Task } from "@/lib/db/schema/tasks";
 import { cn } from "@/lib/utils";
@@ -36,6 +36,13 @@ export default function OptimisticTask({
   // Function to update the task
   const updateTask: TAddOptimistic = (input) =>
     setOptimisticTask({ ...input.data });
+
+  useEffect(() => {
+    // if url contains #edit, open the modal
+    if (window.location.hash === "#edit") {
+      openModal();
+    }
+  }, []);
 
   // Rendering the component
   return (
