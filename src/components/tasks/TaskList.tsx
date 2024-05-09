@@ -25,7 +25,7 @@ export default function TaskList({
   dueDate
 }: {
   tasks: CompleteTask[];
-  dueDate: Date;
+    dueDate?: Date | null;
 }) {
   // Using the useOptimisticTasks hook to manage the tasks state
   const { optimisticTasks, addOptimisticTask } = useOptimisticTasks(
@@ -33,8 +33,10 @@ export default function TaskList({
   );
   // State for modal open/close
   const [open, setOpen] = useState(false);
+
   // State for the active task
   const [activeTask, setActiveTask] = useState<Task | null>(null);
+
   // Function to open the modal
   const openModal = (task?: Task) => {
     setOpen(true);

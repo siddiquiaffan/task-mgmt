@@ -19,7 +19,7 @@ import { Button } from "@/components/ui/button";
 // Interface for the DateFilter component props
 interface DateFilterProps {
     page: string,
-    initialDate?: Date,
+    initialDate?: Date | null,
     searchParam?: string,
     cookieName?: string
 }
@@ -30,10 +30,12 @@ const DateFilter: React.FC<DateFilterProps> = ({ page, initialDate, searchParam 
     const router = useRouter()
 
     // State for the filter date
-    const [filterDate, setFilterDate] = React.useState<Date>(initialDate ?? new Date(new Date().setHours(0, 0, 0)))
+    const [filterDate, setFilterDate] = React.useState<Date | null>(initialDate!)
 
     // Function to handle date change
     const handleDateChange = () => {
+        if (!filterDate) return
+
         try {
             // Push the new date to the router
             router.push(`${page}?${searchParam}=${format(filterDate, "yyyy-MM-dd")}`)
@@ -44,6 +46,8 @@ const DateFilter: React.FC<DateFilterProps> = ({ page, initialDate, searchParam 
 
     // Effect to handle date change when filterDate changes
     useEffect(() => {
+        if (!filterDate) return
+
         handleDateChange()
 
         // Save the date to the cookie
@@ -52,19 +56,19 @@ const DateFilter: React.FC<DateFilterProps> = ({ page, initialDate, searchParam 
         // eslint-disable-next-line
     }, [filterDate])
 
-    // on page load get the date from the cookie if not provided
-    useEffect(() => {
-        if (!initialDate) {
-            const date = document.cookie
-                .split('; ')
-                .find(row => row.startsWith(`${cookieName}=`))
-                ?.split('=')[1]
-            if (date) {
-                setFilterDate(new Date(date))
-            }
-        }
-        // eslint-disable-next-line
-    }, [])
+    // // on page load get the date from the cookie if not provided
+    // useEffect(() => {
+    //     if (!initialDate) {
+    //         const date = document.cookie
+    //             .split('; ')
+    //             .find(row => row.startsWith(`${cookieName}=`))
+    //             ?.split('=')[1]
+    //         if (date) {
+    //             setFilterDate(new Date(date))
+    //         }
+    //     }
+    //     // eslint-disable-next-line
+    // }, [])
 
     // Render the component
     return (
@@ -79,7 +83,7 @@ const DateFilter: React.FC<DateFilterProps> = ({ page, initialDate, searchParam 
                         )}
                     >
                         <CalendarIcon className="mr-2 h-4 w-4" />
-                        {filterDate ? format(filterDate, "PPP") : <span>Pick a date</span>}
+                        {filterDate ? format(filterDate, "PPP") : <span>Due date</span>}
                     </Button>
                 </PopoverTrigger>
                 <PopoverContent
@@ -104,7 +108,7 @@ const DateFilter: React.FC<DateFilterProps> = ({ page, initialDate, searchParam 
                     <div className="rounded-md border">
                         <Calendar mode="single" disabled={() => {
                             return false
-                        }} selected={filterDate} onSelect={setFilterDate as any} />
+                        }} selected={filterDate || new Date()} onSelect={setFilterDate as any} />
                     </div>
                 </PopoverContent>
             </Popover>

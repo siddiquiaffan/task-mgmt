@@ -15,8 +15,8 @@ export default async function TasksPage({
   searchParams: Record<string, string>;
 }) {
   // Get the date from the search parameters or use the current date
-  const dueDate = new Date(searchParams.dueDate ?? new Date())
-  dueDate.setHours(0, 0, 0)
+  const dueDate = searchParams.dueDate ? new Date(searchParams.dueDate) : null;
+  dueDate?.setHours(0, 0, 0)
 
   // Render the Tasks component with the provided date
   return (
@@ -32,18 +32,18 @@ export default async function TasksPage({
 }
 
 // Tasks component that fetches and displays tasks
-const Tasks = async ({ dueDate }: { dueDate: Date }) => {
+const Tasks = async ({ dueDate }: { dueDate?: Date | null }) => {
   // Check if the user is authenticated
   await checkAuth();
 
   // Fetch the tasks by their creation date
-  const { tasks } = await getActiveTasks({ dueDate });
+  const { tasks } = dueDate ? await getTasksByDate(dueDate) : await getTasks();
 
   // Render the tasks inside a Suspense component
   // If the tasks data is not ready, show a loading spinner
   return (
     <Suspense fallback={<Loading />}>
-      <TaskList tasks={tasks} dueDate={dueDate!} />
+      <TaskList tasks={tasks} dueDate={dueDate} />
     </Suspense>
   );
 };
