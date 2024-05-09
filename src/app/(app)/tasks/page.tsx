@@ -37,7 +37,7 @@ const Tasks = async ({ dueDate }: { dueDate?: Date | null }) => {
   await checkAuth();
 
   // Fetch the tasks by their creation date
-  const { tasks } = dueDate ? await getTasksByDate(dueDate) : await getTasks();
+  const { tasks } = dueDate ? await getActiveTasks({ dueDate }) : await getTasks();
 
   // Render the tasks inside a Suspense component
   // If the tasks data is not ready, show a loading spinner
